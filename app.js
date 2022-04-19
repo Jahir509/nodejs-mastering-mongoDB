@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // this middleware for get the current user data
 app.use((req,res,next) => {
-    User.findById("625e4b394ec455e1361cc1c7")
+    User.findById("625e874ce6894762e365e499")
     .then(user => {
         req.user = user;
         next();
