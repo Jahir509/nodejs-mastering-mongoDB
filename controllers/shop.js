@@ -123,7 +123,7 @@ exports.postOrder = (req,res,next)=>{
           product: i.productId
         }
       });
-      console.log(products);
+      //console.log(products);
       const order = new Order({
         user: {
           name: req.user.name,
@@ -131,40 +131,13 @@ exports.postOrder = (req,res,next)=>{
         },
         products: products
       });
-      console.log(order);
-      //return order.save();
+      //console.log(order);
+      return order.save();
     })
     .then(result => {
       res.redirect('/orders');
     })
     .catch(err=>console.log(err));
-
-  
-  // let fetchedCart;
-  // req.user.getCart()
-  // .then(cart=>{
-  //   fetchedCart = cart;
-  //   return cart.getProducts();
-  // })
-  // .then(products=>{
-  //   req.user.createOrder()
-  //   .then( order=> {
-  //     return order.addProducts(
-  //       products.map(product=>{
-  //         product.orderItem = { quantity: product.cartItem.quantity };
-  //         return product
-  //       })
-  //     );
-  //   })
-  //   .then(result=>{
-  //     return fetchedCart.setProducts(null)
-  //   })
-  //   .then(result=>{
-  //     res.redirect('/orders')
-  //   })
-  //   .catch(err=> console.log(err))
-  // })
-  // .catch(err=> console.log(err))
 }
 
 

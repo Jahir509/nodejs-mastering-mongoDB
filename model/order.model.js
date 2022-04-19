@@ -18,15 +18,12 @@ const orderSchema = new Schema({
         }
     },
     products: 
-    {
-        productData: 
-        [
-            {
-                product: { type: Object, required: true },
-                quantity: { type: Number, required: true }
-            }
-        ]
-    },
+    [
+        {
+            product: { type: Object, required: true },
+            quantity: { type: Number, required: true }
+        }
+    ],
     
 });
 
