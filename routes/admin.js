@@ -23,7 +23,7 @@ router.post('/edit-product', adminController.postEditProduct);
 
 
 // // /admin/delete-product => POST
-// router.post('/delete-product', adminController.deleteProduct);
+router.post('/delete-product', adminController.deleteProduct);
 
 
 
