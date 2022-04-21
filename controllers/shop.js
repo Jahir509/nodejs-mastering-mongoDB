@@ -93,9 +93,9 @@ exports.postCartDeleteProduct = (req,res,next)=>{
 }
 
 exports.getOrders = (req,res,next)=>{
-  req.user.getOrders({include:['products']})
+  Order.find({"user.userId": req.user._id})
   .then(orders=>{
-    // log(orders);
+    //log(orders);
     res.render('shop/orders', {
       pageTitle: 'Your Orders',
       path: '/orders',
@@ -135,6 +135,9 @@ exports.postOrder = (req,res,next)=>{
       return order.save();
     })
     .then(result => {
+      req.user.clearFromCart();
+    })
+    .then(()=>{
       res.redirect('/orders');
     })
     .catch(err=>console.log(err));
