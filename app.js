@@ -13,6 +13,8 @@ app.set('views', 'views/ejs');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
+
 
 const errorController = require('./controllers/error');
 const User = require('./model/user.model');
@@ -30,6 +32,7 @@ app.use((req,res,next) => {
     .catch(err=>console.log(err));
 });
 
+app.use(authRoutes);
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
