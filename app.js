@@ -3,9 +3,16 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 // const mongoConnect = require('./util/database').mongoConnect;
 const app = express();
+const MONGODB_URI = 'mongodb://127.0.0.1:27017/node-complete';
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions'
+});
 
 
 app.set('view engine', 'ejs');
@@ -21,10 +28,21 @@ const User = require('./model/user.model');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+    session({
+      secret:'firefly',
+      resave: false,
+      saveUninitialized: false,
+      store: store
+    })
+);
 
 // this middleware for get the current user data
 app.use((req,res,next) => {
-    User.findById("625e874ce6894762e365e499")
+    if(!req.session.user){
+        return next();
+    }
+    User.findById(req.session.user._id)
     .then(user => {
         req.user = user;
         next();
