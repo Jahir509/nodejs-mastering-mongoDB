@@ -9,7 +9,7 @@ exports.getAddProduct =  (req, res, next) => {
        formsCSS: true,
        productCSS: true,
        activeAddProduct: true,
-       isAuthenticated: req.isLoggedIn
+       isAuthenticated: req.session.isLoggedIn
       });
   }
 
@@ -31,7 +31,7 @@ exports.getProducts = (req, res, next) => {
           hasProducts: products.length > 0,
           activeShop: true,
           productCSS: true,
-          isAuthenticated: req.isLoggedIn
+          isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch(err=>{
