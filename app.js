@@ -65,20 +65,6 @@ mongoose
     'mongodb://127.0.0.1:27017/node-complete?retryWrites=true'
   )
   .then(result => {
-    User.findOne()
-    .then(userData=>{
-      if(!userData){
-        const user = new User({
-          name:'Jahir',
-          email:'jahir@gmail.com',
-          cart:{
-            items: []
-          }
-        })
-        user.save();
-      }
-    })
-    
     app.listen(3000);
     console.log('DB is Connected')
   })
