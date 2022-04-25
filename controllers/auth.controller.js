@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const User = require('../model/user.model');
 const nodemailer = require('nodemailer');
@@ -115,4 +116,58 @@ exports.postSignUp = (req,res,next)=> {
         .catch(err=> console.log(err))
 
     // console.log(email,password,confirmPassword);
+};
+
+exports.getReset = (req,res,next)=> {
+    let message = req.flash('error');
+    if(message.length > 0){
+        message = message[0];
+    }else{
+        message = null;
+    }
+    res.render('auth/reset',{
+        path:'/reset',
+        pageTitle:'Reset Password',
+        errorMessage: message,
+    });
+};
+
+exports.postReset = (req,res,next)=> {
+    crypto.randomBytes(32,(err,buffer)=>{
+        if(err){
+            console.log(err);
+            return res.redirect('/reset');
+        }
+        const token = buffer.toString('hex');
+        User.findOne({email:req.body.email})
+        .then(user=>{
+            if(!user){
+                req.flash('error','No account with')
+                return res.redirect('/reset');
+            }
+            user.resetToken = token;
+            user.resetTokenExpiration = Date.now() + 3600000;
+            return user.save();
+        })
+        .then(result=>{
+            req.flash('password-reset','A reset password setting has been sent to your email')
+            res.redirect('/')
+            transporter.sendMail({
+                to: req.body.email,
+                from: 'work.jahir@outlook.com',
+                subject:'Password Reset',
+                html: `
+                    <p>You requested a password reset</p>
+                    <p> Click this <a href="http://localhost:3000/reset/${token}">Link</a> to set a new password</p>
+                 `
+            })
+            .catch(err=>{
+                console.log("Mail Error");
+                console.log(err);
+            }); 
+        })
+        .catch(err=>{
+            console.log("Reset Token Error....",err);
+        })
+    });
 };

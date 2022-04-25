@@ -238,6 +238,12 @@ form {
   color: red;
 }
 
+.user-message--success{
+  border-color: green;
+  background: rgb(176, 255, 231);
+  color: rgb(195, 240, 195);
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;

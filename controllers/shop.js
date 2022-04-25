@@ -36,6 +36,12 @@ exports.getProductById = (req,res,next)=>{
 }
 
 exports.getIndex = (req,res,next)=>{
+  let message = req.flash('error');
+  if(message.length > 0){
+      message = message[0];
+  }else{
+      message = null;
+  }
   Product.find()
   .then(products=>{
     res.render('shop/index', {
@@ -45,6 +51,7 @@ exports.getIndex = (req,res,next)=>{
       hasProducts: products.length > 0,
       activeShop: true,
       productCSS: true,
+      notificationMessage:message
     });
   })
   .catch(err=> console.log(err));
