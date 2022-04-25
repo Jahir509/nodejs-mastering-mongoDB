@@ -1,5 +1,13 @@
 const bcrypt = require('bcrypt');
 const User = require('../model/user.model');
+const nodemailer = require('nodemailer');
+const sendGridTransport = require('nodemailer-sendgrid-transport');
+
+const transporter = nodemailer.createTransport(sendGridTransport({
+    auth:{
+        api_key: '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'
+    }
+}))
 
 exports.login = (req,res,next)=>{
     let errorMessage = req.flash('error');
@@ -88,7 +96,17 @@ exports.postSignUp = (req,res,next)=> {
                   return user.save();
               })
               .then(result=>{
-                  res.redirect('/login');
+                res.redirect('/login');
+                  transporter.sendMail({
+                      to: email,
+                      from: 'work.jahir@outlook.com',
+                      subject:'Signup Completion',
+                      html:'<h1>You successfully signed up!</h1>'
+                  })
+                  .catch(err=>{
+                      console.log("Mail Error");
+                      console.log(err);
+                  });
               })
               .catch(err=>{
                   console.log("Hashing problem "+ err);
