@@ -2,13 +2,22 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const User = require('../model/user.model');
 const nodemailer = require('nodemailer');
-const sendGridTransport = require('nodemailer-sendgrid-transport');
+const config = require('config');
+// const sendGridTransport = require('nodemailer-sendgrid-transport');
 
-const transporter = nodemailer.createTransport(sendGridTransport({
-    auth:{
-        api_key: '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'
+// const transporter = nodemailer.createTransport(sendGridTransport({
+//     auth:{
+//         api_key: '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'
+//     }
+// }))
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: config.get('MAILSERVER.GMAIL.USER'),
+        pass: config.get('MAILSERVER.GMAIL.PASSWORD')
     }
-}))
+})
 
 exports.login = (req,res,next)=>{
     let errorMessage = req.flash('error');
@@ -100,7 +109,7 @@ exports.postSignUp = (req,res,next)=> {
                 res.redirect('/login');
                   transporter.sendMail({
                       to: email,
-                      from: 'work.jahir@outlook.com',
+                      from: config.get('MAILSERVER.GMAIL.USER'),
                       subject:'Signup Completion',
                       html:'<h1>You successfully signed up!</h1>'
                   })
@@ -154,7 +163,7 @@ exports.postReset = (req,res,next)=> {
             res.redirect('/')
             transporter.sendMail({
                 to: req.body.email,
-                from: 'work.jahir@outlook.com',
+                from: config.get('MAILSERVER.GMAIL.USER'),
                 subject:'Password Reset',
                 html: `
                     <p>You requested a password reset</p>
