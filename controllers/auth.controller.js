@@ -151,7 +151,7 @@ exports.postReset = (req,res,next)=> {
         User.findOne({email:req.body.email})
         .then(user=>{
             if(!user){
-                req.flash('error','No account with')
+                req.flash('error','No account with that email found')
                 return res.redirect('/reset');
             }
             user.resetToken = token;
@@ -180,3 +180,58 @@ exports.postReset = (req,res,next)=> {
         })
     });
 };
+
+exports.resetPassword = (req,res,next)=> {
+    const newPassword = req.body.password1;
+    const userId = req.body.userId;
+    const passwordToken = req.body.passwordToken;
+    let resetUser;
+    User.findOne({
+            _id: userId,
+            resetToken:passwordToken,
+            resetTokenExpiration:{$gt:Date.now()}
+        })
+        .then(user=>{
+            resetUser = user;
+            return bcrypt.hash(newPassword,12)
+        })
+        .then(hashedPassword=>{
+            resetUser.password = hashedPassword;
+            resetUser.resetToken = undefined;
+            resetUser.resetTokenExpiration = undefined;
+            return resetUser.save();
+        })
+        .then(result=>{
+            res.redirect('/login')
+        })
+        .catch(err=> {
+            console.log(err);
+    });
+};
+
+exports.getNewPassword = (req,res,next)=> {
+    const token = req.params.token;
+    console.log(token);
+    User.findOne({
+            resetToken:token,
+            resetTokenExpiration:{$gt:Date.now()}
+        })
+        .then(user=>{
+            let errorMessage = req.flash('error');
+            if(errorMessage.length > 0){
+                errorMessage = errorMessage[0];
+            }else{
+                errorMessage = null;
+            }
+            res.render('auth/new-password',{
+                path: '/new-password',
+                pageTitle: 'Reset Password',
+                errorMessage: errorMessage,
+                userId: user._id.toString(),
+                passwordToken: token
+            })
+        }).
+        catch(err=> {
+            console.log(err);
+        });
+}
