@@ -16,6 +16,7 @@ router.post('/signup',
             check('email')
                 .isEmail()
                 .withMessage('Please enter a valid email')
+                .normalizeEmail()
                 .custom((value,{req})=>{
                     if(value === 'jahir@gmail.com'){
                         throw new Error('This email is forbidden.');
@@ -27,8 +28,10 @@ router.post('/signup',
                 'Please Enter a valid password with only letter & numbers and at least 5 characters'
                 )
                 .isLength({min:3})
-                .isAlphanumeric(),
+                .isAlphanumeric()
+                .trim(),
             body('confirmPassword')
+                .trim()
                 .custom((value,{req})=>{
                     if(value !== req.body.password){
                         throw new Error(`Password didn't match`)
