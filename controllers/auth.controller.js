@@ -31,19 +31,34 @@ exports.login = (req,res,next)=>{
     res.render('auth/login',{
         path: '/login',
         pageTitle: 'Login',
-        errorMessage: errorMessage
+        errorMessage: errorMessage,
+        oldInput:{
+            email: '',
+            password: ''
+        },
+        validationErrors:[]
     })
 };
 
 exports.postLogin = (req,res,next)=> {
     const email = req.body.email;
     const password = req.body.password;
+    const errors = validationResult(req);
     User.findOne({email:email})
         .then(user=>{
            if(!user)
            {
-               req.flash('error','Invalid Email');
-               return res.redirect('/login')
+               return res.status(422)
+                   .render('auth/login',{
+                       path: '/login',
+                       pageTitle: 'login',
+                       errorMessage:'Invalid Email',
+                       oldInput:{
+                           email: email,
+                           password: password
+                       },
+                       validationErrors: errors.array()
+                   });
            }
            bcrypt.compare(password,user.password)
                .then(isTrue=>{
@@ -54,8 +69,17 @@ exports.postLogin = (req,res,next)=> {
                            return res.redirect('/');
                        });
                    }
-                   req.flash('error','Invalid Password');
-                   res.redirect('/login');
+                   return res.status(422)
+                       .render('auth/login',{
+                           path: '/login',
+                           pageTitle: 'login',
+                           errorMessage:'Invalid Password',
+                           oldInput:{
+                               email: email,
+                               password: password
+                           },
+                           validationErrors: errors.array()
+                       });
                })
                .catch(err=>{
                    console.log("Hash doesn't match" + err);
@@ -67,7 +91,7 @@ exports.postLogin = (req,res,next)=> {
 
 exports.postLogout = (req,res,next)=> {
     req.session.destroy((err)=>{
-        console.log(err);
+       // console.log(err);
         res.redirect('/');
     });
 };
@@ -82,7 +106,12 @@ exports.getSignUp = (req,res,next)=> {
     res.render('auth/signup',{
         path: '/signup',
         pageTitle: 'Signup',
-        errorMessage:errorMessage
+        errorMessage:errorMessage,
+        oldInput:{
+            email: '',
+            password: ''
+        },
+        validationErrors: []
     })
 };
 
@@ -91,21 +120,36 @@ exports.postSignUp = (req,res,next)=> {
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
     const errors = validationResult(req);
+   // console.log(errors)
     if(!errors.isEmpty()){
        // console.log(errors)
         return res.status(422)
             .render('auth/signup',{
             path: '/signup',
             pageTitle: 'Signup',
-            errorMessage:errors.array()[0].msg
-        })
+            errorMessage:errors.array()[0].msg,
+            oldInput:{
+                email: email,
+                password: password
+            },
+            validationErrors: errors.array()
+        });
     }
     User.findOne({email: email})
         .then(userData=>{
             if(userData)
             {
-                req.flash('error','Email already exist.');
-                return res.redirect('/signup')
+                return res.status(422)
+                    .render('auth/signup',{
+                        path: '/signup',
+                        pageTitle: 'Signup',
+                        errorMessage:'Email already exist.',
+                        oldInput:{
+                            email: email,
+                            password: password
+                        },
+                        validationErrors: []
+                });
             }
           return bcrypt.hash(req.body.password,12)
               .then(hashedPassword=>{
