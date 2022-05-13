@@ -86,7 +86,11 @@ exports.postLogin = (req,res,next)=> {
                    res.redirect('/login');
                });
         })
-        .catch(err=> console.log(err))
+        .catch(err=> {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
 };
 
 exports.postLogout = (req,res,next)=> {
@@ -177,7 +181,11 @@ exports.postSignUp = (req,res,next)=> {
                   console.log("Hashing problem "+ err);
               });
         })
-        .catch(err=> console.log(err))
+        .catch(err=> {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
 
     // console.log(email,password,confirmPassword);
 };
@@ -231,7 +239,10 @@ exports.postReset = (req,res,next)=> {
             }); 
         })
         .catch(err=>{
-            console.log("Reset Token Error....",err);
+            console.log("Reset Token Error....");
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         })
     });
 };
@@ -260,7 +271,9 @@ exports.resetPassword = (req,res,next)=> {
             res.redirect('/login')
         })
         .catch(err=> {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
     });
 };
 
@@ -287,6 +300,8 @@ exports.getNewPassword = (req,res,next)=> {
             })
         }).
         catch(err=> {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }

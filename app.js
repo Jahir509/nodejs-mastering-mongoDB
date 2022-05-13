@@ -49,6 +49,13 @@ app.use(csrfProtection);
 // Always need to add after session
 app.use(flash());
 
+app.use((req,res,next)=>{
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+})
+
+
 // this middleware for get the current user data
 app.use((req,res,next) => {
     if(!req.session.user){
@@ -62,22 +69,21 @@ app.use((req,res,next) => {
     .catch(err=>console.log(err));
 });
 
-app.use((req,res,next)=>{
-    res.locals.isAuthenticated = req.session.isLoggedIn;
-    res.locals.csrfToken = req.csrfToken();
-    next();
-})
 
 app.use(authRoutes);
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
-app.use(errorController.get404);
+app.get('/500',errorController.get500);
 
+app.use(errorController.get404);
+// centralize error handling
 // mongoConnect(() =>{
 //   app.listen(3000);
 // })
-
+app.use((error,req,res,next)=>{
+    res.redirect('/500');
+});
 mongoose
   .connect(
     'mongodb://127.0.0.1:27017/node-complete?retryWrites=true'
