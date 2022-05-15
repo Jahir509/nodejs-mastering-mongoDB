@@ -82,6 +82,7 @@ app.use(errorController.get404);
 //   app.listen(3000);
 // })
 app.use((error,req,res,next)=>{
+    console.log(error);
     res.redirect('/500');
 });
 mongoose

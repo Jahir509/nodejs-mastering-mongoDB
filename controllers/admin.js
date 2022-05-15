@@ -2,7 +2,7 @@ const mongodb = require('mongodb');
 const ObjectId = mongodb.ObjectId;
 const Product = require('../model/product.model');
 const {validationResult} = require('express-validator');
-
+const item_per_page = 1;
 
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/add-product', {
@@ -51,7 +51,7 @@ exports.postAddProduct = (req, res, next) => {
     imageUrl: imageUrl,
     userId: req.user
   })
-  console.log(product);
+  // console.log(product);
   product.save()
   .then(result=> {
     //console.log(result);
@@ -59,6 +59,7 @@ exports.postAddProduct = (req, res, next) => {
     res.redirect('/products')
   })
   .catch(err=> {
+    console.log(err);
     const error = new Error(err);
     error.httpStatusCode = 500;
     return next(error);
@@ -67,9 +68,17 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  const page = req.query.page ? req.query.page : 1;
+  let totalProducts = 0;
   Product.find({userId:req.user._id})
+      .count()
+      .then(productCount=>{
+        totalProducts = productCount;
+        return Product.find({userId:req.user._id})
+            .skip((page-1)*item_per_page)
+            .limit(item_per_page)
+      })
   .then(products=>{
-    //console.log(products)
       res.render('admin/products', {
         prods: products,
         pageTitle: 'Admin Products',
@@ -77,9 +86,17 @@ exports.getProducts = (req, res, next) => {
         hasProducts: products.length > 0,
         activeShop: true,
         productCSS: true,
+        totalProduct:totalProducts,
+        hasNextPage: item_per_page * Number(page) < totalProducts,
+        hasPreviousPage: Number(page) > 1,
+        nextPage: Number(page)+1,
+        previousPage: Number(page)-1,
+        lastPage: Math.ceil(totalProducts / item_per_page),
+        currentPage:Number(page),
     });
   })
   .catch(err=>{
+    console.log(err);
     const error = new Error(err);
     error.httpStatusCode = 500;
     return next(error);
@@ -109,6 +126,7 @@ exports.getEditProduct = (req, res, next) => {
     });
   })
   .catch(err=> {
+    console.log(err);
     const error = new Error(err);
     error.httpStatusCode = 500;
     return next(error);
@@ -162,6 +180,7 @@ exports.postEditProduct = (req,res,next)=>{
         });  // update the existing one
   })
   .catch(err=> {
+    console.log(err);
     const error = new Error(err);
     error.httpStatusCode = 500;
     return next(error);
@@ -176,6 +195,7 @@ exports.deleteProduct = (req,res,next)=>{
       res.redirect('/admin/products');
     })
     .catch(err =>{
+      console.log(err);
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
