@@ -3,6 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const Product = require('../model/product.model');
 const Order = require('../model/order.model');
+const PDFDocument = require('pdfkit');
 const log = (arg)=>console.log(arg);
 const item_per_page = 1;
 
@@ -48,7 +49,6 @@ exports.getProducts = (req, res, next) => {
         return next(error);
       });
 };
-
 
 exports.getProductById = (req,res,next)=>{
   const prodId = req.params.productId;
@@ -111,7 +111,6 @@ exports.getIndex = (req,res,next)=>{
   });
   
 }
-
 
 exports.getCart = (req,res,next)=>{
   console.log(req.user.cart)
@@ -224,7 +223,6 @@ exports.postOrder = (req,res,next)=>{
     });
 }
 
-
 exports.getInvoice = (req,res,next)=>{
   const orderId = req.params.orderId;
   Order.findById(orderId)
@@ -238,7 +236,13 @@ exports.getInvoice = (req,res,next)=>{
 
         const invoiceName = `${orderId}.pdf`;
         const invoicePath = path.join('data','invoices',invoiceName);
-
+        const pdfDoc = new PDFDocument();
+        res.setHeader('Content-Type','application/pdf');
+        res.setHeader('Content-Disposition','attachment; filename= "'+ invoiceName +'"');
+        pdfDoc.pipe(fs.createWriteStream(invoicePath));
+        pdfDoc.pipe(res);
+        pdfDoc.text('My name is zahir');
+        pdfDoc.end();
         // this portion is using preLoading Data (Recommended for smaller files)
         // fs.readFile(invoicePath,(err,data)=>{
         //   if(err) {
@@ -251,10 +255,10 @@ exports.getInvoice = (req,res,next)=>{
         // })
 
         // this portion is using streaming Data ( Recommended for bigger file )
-        const file = fs.createReadStream(invoicePath);
-          res.setHeader('Content-Type','application/pdf');
-          res.setHeader('Content-Disposition','attachment; filename= "'+ invoiceName +'"');
-          file.pipe(res);
+        // const file = fs.createReadStream(invoicePath);
+        //   res.setHeader('Content-Type','application/pdf');
+        //   res.setHeader('Content-Disposition','attachment; filename= "'+ invoiceName +'"');
+        //   file.pipe(res);
       })
       .catch(err=>next(err))
 };
