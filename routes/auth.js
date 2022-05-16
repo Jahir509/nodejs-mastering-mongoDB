@@ -17,6 +17,7 @@ router.post('/signup',
                 .isEmail()
                 .withMessage('Please enter a valid email')
                 .normalizeEmail()
+                .trim()
                 .custom((value,{req})=>{
                     if(value === 'jahir@gmail.com'){
                         throw new Error('This email is forbidden.');

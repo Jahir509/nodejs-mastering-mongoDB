@@ -8,6 +8,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 // this is for instant error message
 const flash = require('connect-flash');
+const multer = require('multer');
 
 // const mongoConnect = require('./util/database').mongoConnect;
 const app = express();
@@ -20,6 +21,25 @@ const store = new MongoDBStore({
 });
 
 const csrfProtection = csrf();
+const storage = multer.diskStorage({
+    destination: (req, file, cb) =>{
+        //ensure that this folder already exists in your project directory
+        cb(null, "images");
+    },
+    filename: (req, file, cb)=>{
+        cb(null,'images-'+ file.originalname)
+    }
+});
+
+const imageFileFilter = (req, file, cb) =>{
+    if(!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) { //If the file uploaded is not any of this file type
+
+        // If error in file type, then attacch this error to the request header
+        req.fileValidationError = "You can upload only image files";
+        return cb(null,false, req.fileValidationError);
+    }
+    cb(null, true)
+};
 
 app.set('view engine', 'ejs');
 app.set('views', 'views/ejs');
@@ -33,6 +53,7 @@ const errorController = require('./controllers/error');
 const User = require('./model/user.model');
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(multer({storage: storage, fileFilter: imageFileFilter}).single('image'))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
     session({
