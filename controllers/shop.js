@@ -238,15 +238,23 @@ exports.getInvoice = (req,res,next)=>{
 
         const invoiceName = `${orderId}.pdf`;
         const invoicePath = path.join('data','invoices',invoiceName);
-        fs.readFile(invoicePath,(err,data)=>{
-          if(err) {
-            return next(err);
-          }
+
+        // this portion is using preLoading Data (Recommended for smaller files)
+        // fs.readFile(invoicePath,(err,data)=>{
+        //   if(err) {
+        //     return next(err);
+        //   }
+        //   res.setHeader('Content-Type','application/pdf');
+        //   // res.setHeader('Content-Disposition','inline; filename= "'+ invoiceName +'"');
+        //   res.setHeader('Content-Disposition','attachment; filename= "'+ invoiceName +'"');
+        //   res.send(data);
+        // })
+
+        // this portion is using streaming Data ( Recommended for bigger file )
+        const file = fs.createReadStream(invoicePath);
           res.setHeader('Content-Type','application/pdf');
-          // res.setHeader('Content-Disposition','inline; filename= "'+ invoiceName +'"');
           res.setHeader('Content-Disposition','attachment; filename= "'+ invoiceName +'"');
-          res.send(data);
-        })
+          file.pipe(res);
       })
       .catch(err=>next(err))
 };
