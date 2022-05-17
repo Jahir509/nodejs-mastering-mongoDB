@@ -43,7 +43,7 @@ router.post('/edit-product',
 
 // // /admin/delete-product => POST
 router.post('/delete-product', auth,  adminController.deleteProduct);
-
+// router.delete('/product/:productId', auth,  adminController.deleteProduct);
 
 
 module.exports = router;
