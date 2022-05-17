@@ -2,6 +2,7 @@ const mongodb = require('mongodb');
 const ObjectId = mongodb.ObjectId;
 const Product = require('../model/product.model');
 const {validationResult} = require('express-validator');
+const fileHelper = require('../util/file');
 const item_per_page = 1;
 
 exports.getAddProduct = (req, res, next) => {
@@ -185,10 +186,13 @@ exports.postEditProduct = (req,res,next)=>{
     }
     product.title = updatedTitle;
     product.price = updatedPrice;
+    console.log(image);
     if(image){
+      fileHelper.deleteFile(product.imageUrl)
       product.imageUrl = image.path;
     }
     product.description = updatedDescription;
+    // console.log(product)
     return product.save()
         .then(result=>{
           // this then() block is for successfull operation
@@ -206,16 +210,23 @@ exports.postEditProduct = (req,res,next)=>{
 
 exports.deleteProduct = (req,res,next)=>{
   const productId = req.body.productId;
-  Product.deleteOne({_id:productId,userId:req.user._id})
-    .then(() => {
-      console.log('DESTROYED PRODUCT');
-      res.redirect('/admin/products');
-    })
-    .catch(err =>{
-      console.log(err);
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
+  Product.findById(productId)
+      .then(product=>{
+        if(!product){
+          return next(new Error('Product Not Found'));
+        }
+        fileHelper.deleteFile(product.imageUrl)
+        return Product.deleteOne({_id:productId,userId:req.user._id});
+      })
+      .then(() => {
+        console.log('DESTROYED PRODUCT');
+        res.redirect('/admin/products');
+      })
+      .catch(err =>{
+        console.log(err);
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
   // Product.destroy({where: {id:productId}}).then.catch();
 }
