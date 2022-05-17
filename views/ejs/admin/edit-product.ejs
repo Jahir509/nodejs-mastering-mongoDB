@@ -56,9 +56,7 @@
                     class="<%= validationErrors.find(error=> error.param === 'description') ? 'invalid': '' %> "
                     name="description"
                     id="description"
-                    rows="5">
-                <% if(editing || hasError) { %> <%=  product.description %> <% } %>
-            </textarea>
+                    rows="5"><% if(editing || hasError) { %> <%=  product.description %> <% } %></textarea>
         </div>
         <% if (editing) { %>
             <input type="hidden" value="<%= product._id %>" name="productId">

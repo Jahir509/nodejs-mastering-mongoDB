@@ -1,0 +1,72 @@
+[
+  {
+    "title": "TEMORAK",
+    "price": 384,
+    "imageUrl": "images\1.jpg",
+	"userId":"",
+    "description": "Laboris id elit magna velit cupidatat esse incididunt velit commodo mollit adipisicing nostrud. Aute labore voluptate velit elit occaecat cillum laboris excepteur. Excepteur amet laboris et qui sit qui. Sit ex Lorem voluptate sit velit in qui ut magna elit proident Lorem. Occaecat consequat laboris reprehenderit mollit reprehenderit ipsum exercitation in nulla esse Lorem ut et. Mollit mollit magna ex Lorem. Consectetur anim do minim quis voluptate ea.\r\n"
+  },
+  {
+    "title": "ATGEN",
+    "price": 361,
+    "imageUrl": "images\2.jpg",
+	"userId":"",
+    "description": "Reprehenderit ea sint esse ea laborum amet sunt veniam nisi eu aliqua cillum magna. Aliqua laboris do nulla dolore id occaecat anim exercitation nisi laboris. Fugiat cupidatat exercitation et elit cupidatat non laborum amet ad commodo do eiusmod tempor. Quis ullamco laborum enim nulla magna esse in velit anim veniam. Aliqua irure officia aliquip aliquip eu voluptate nostrud dolore et consequat do officia dolore. Laboris culpa officia est aute amet esse exercitation culpa nostrud commodo quis exercitation aliqua enim. Voluptate incididunt ipsum do amet id incididunt exercitation proident.\r\n"
+  },
+  {
+    "title": "PHOTOBIN",
+    "price": 225,
+    "imageUrl": "images\3.jpg",
+	"userId":"",
+    "description": "Quis sint exercitation excepteur deserunt do Lorem sint qui ullamco. Veniam deserunt dolore enim labore ipsum amet sunt aute. Sunt pariatur incididunt dolor laboris ex occaecat voluptate cupidatat.\r\n"
+  },
+  {
+    "title": "ACCEL",
+    "price": 138,
+    "imageUrl": "images\4.jpg",
+	"userId":"",
+    "description": "Nisi commodo incididunt eu in consequat qui minim et cillum labore irure id quis. Voluptate ut voluptate mollit incididunt aliqua laboris non culpa consectetur mollit officia eiusmod enim dolore. Sit duis eiusmod in dolore ut mollit ipsum culpa. Reprehenderit ex dolore ipsum quis sit amet adipisicing excepteur. Quis consequat anim eu in culpa eu aliquip sint enim consequat. Excepteur nostrud ullamco do quis et nulla exercitation qui adipisicing sit non incididunt enim.\r\n"
+  },
+  {
+    "title": "SURELOGIC",
+    "price": 623,
+    "imageUrl": "images\5.jpg",
+	"userId":"",
+    "description": "Proident incididunt proident non eu do nulla exercitation mollit amet incididunt magna in consectetur. Nulla occaecat ipsum consectetur irure veniam aliquip labore quis reprehenderit non elit aliqua. Esse id nisi dolor cillum laborum velit tempor laborum. Mollit incididunt nisi nostrud aliqua dolor laboris enim nisi.\r\n"
+  },
+  {
+    "title": "MAXIMIND",
+    "price": 476,
+    "imageUrl": "images\6.jpg",
+	"userId":"",
+    "description": "Enim proident Lorem magna aliqua. Nostrud quis cupidatat quis ea tempor in ex mollit anim quis. Nulla reprehenderit veniam excepteur eiusmod cillum do commodo. Sit irure eu voluptate nostrud sit sit incididunt fugiat aliquip non culpa ut sint. Minim laboris enim anim irure dolore. Anim non est aute et exercitation eiusmod laborum voluptate proident ex minim consequat ipsum tempor. Quis enim in aliqua deserunt pariatur magna nisi consectetur enim labore culpa.\r\n"
+  },
+  {
+    "title": "APPLIDEC",
+    "price": 828,
+    "imageUrl": "images\7.jpg",
+	"userId":"",
+    "description": "Nisi nostrud ad in cupidatat consectetur cillum ullamco laborum ullamco sint veniam commodo deserunt. Ut irure nisi excepteur aliquip minim voluptate. Ullamco Lorem ut velit esse labore dolore dolore sunt sit proident esse. Sint consequat sint qui est.\r\n"
+  },
+  {
+    "title": "CYTRAK",
+    "price": 936,
+    "imageUrl": "images\8.jpg",
+	"userId":"",
+    "description": "Nulla deserunt nisi sunt reprehenderit. Ad voluptate ad labore mollit fugiat proident nostrud laborum cillum deserunt do. Exercitation exercitation fugiat sunt aliqua commodo in cillum in ad nulla voluptate ut.\r\n"
+  },
+  {
+    "title": "IMAGINART",
+    "price": 466,
+    "imageUrl": "images\9.jpg",
+	"userId":"",
+    "description": "Ipsum id qui sunt ullamco labore commodo qui id eu irure qui laboris adipisicing esse. Quis qui adipisicing laborum labore dolore sunt sit quis sit elit laboris est ad sunt. Excepteur commodo commodo deserunt aliqua non non sunt ad consectetur. Amet pariatur do nisi sit esse est est magna commodo excepteur laborum et consequat.\r\n"
+  },
+  {
+    "title": "PUSHCART",
+    "price": 464,
+    "imageUrl": "images\10.jpg",
+	"userId":"",
+    "description": "Occaecat incididunt non culpa nulla excepteur nisi. Magna aliqua exercitation ut ut sint nostrud eiusmod ea ea incididunt consectetur irure mollit aute. Irure enim eu elit veniam ut. Id esse aute qui commodo amet non. Enim esse non cillum quis ad sunt esse tempor commodo consequat qui enim non. Ea id ad ex incididunt sunt eu reprehenderit pariatur elit enim.\r\n"
+  }
+]

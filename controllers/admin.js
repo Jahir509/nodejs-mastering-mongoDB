@@ -3,7 +3,7 @@ const ObjectId = mongodb.ObjectId;
 const Product = require('../model/product.model');
 const {validationResult} = require('express-validator');
 const fileHelper = require('../util/file');
-const item_per_page = 1;
+const item_per_page = 5;
 
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/add-product', {
