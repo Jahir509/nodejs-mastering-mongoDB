@@ -238,10 +238,21 @@ exports.getInvoice = (req,res,next)=>{
         const invoicePath = path.join('data','invoices',invoiceName);
         const pdfDoc = new PDFDocument();
         res.setHeader('Content-Type','application/pdf');
-        res.setHeader('Content-Disposition','attachment; filename= "'+ invoiceName +'"');
+        res.setHeader('Content-Disposition','inline; filename= "'+ invoiceName +'"');
         pdfDoc.pipe(fs.createWriteStream(invoicePath));
         pdfDoc.pipe(res);
-        pdfDoc.text('My name is zahir');
+        pdfDoc.fontSize(24).text('Invoice',{
+          underline: true
+        })
+        pdfDoc.text('---------------------------');
+        let total = 0;
+        order.products.forEach(x=>{
+          total += (x.quantity * x.product.price);
+          pdfDoc.text(x.product.title + '-' + x.quantity + ' x '+ '$'+x.product.price)
+        });
+        pdfDoc.text('---------------------------');
+
+        pdfDoc.fontSize(20).text("Total Price: $" + total);
         pdfDoc.end();
         // this portion is using preLoading Data (Recommended for smaller files)
         // fs.readFile(invoicePath,(err,data)=>{
