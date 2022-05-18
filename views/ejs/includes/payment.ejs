@@ -1,0 +1,13 @@
+<div class="centered">
+    <button class="btn" id="order-btn">Order Now</button>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe('pk_test_51L0RydE5ZfZx7sH3Gj1Pi1ZnWsAAWD10iXtHWxUO8B987nxtZ9RDJLilMvzPTZ0gnDhRKL7Ct69jipfI639DGFFr00K6t8avV1');
+        const orderBtn = document.getElementById('order-btn');
+        orderBtn.addEventListener('click',function(){
+            stripe.redirectToCheckout({
+                sessionId: ''
+            })
+        })
+    </script>
+</div>
