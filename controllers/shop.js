@@ -1,11 +1,13 @@
 const fs = require('fs');
+const config = require('config');
 const path = require('path');
 const mongoose = require('mongoose');
 const Product = require('../model/product.model');
 const Order = require('../model/order.model');
 const PDFDocument = require('pdfkit');
 const log = (arg)=>console.log(arg);
-const item_per_page = 1;
+const item_per_page = 5;
+const stripe = require('stripe')(config.get('STRIPE.CODE_GREEN'));
 
 exports.getProducts = (req, res, next) => {
   const page = req.query.page ? req.query.page : 1;
@@ -182,10 +184,52 @@ exports.getOrders = (req,res,next)=>{
 }
 
 exports.getCheckout = (req,res,next)=>{
-  res.render('shop/checkout', {
-    pageTitle: 'Checkout',
-    path: '/checkout',
-  });
+    let total;
+    let products;
+    req.user
+        .populate('cart.items.productId')
+        .then(user => {
+            // console.log(user.cart.items);
+            products = user.cart.items;
+            total = 0;
+            products.forEach(each => {
+                total += (each.productId.price * each.quantity)
+            })
+
+            /**
+             * Stripe Payment
+             * **/
+
+            return stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                line_items: products.map(p=> {
+                    return {
+                        name: p.productId.title,
+                        description: p.productId.description,
+                        amount: p.productId.price * 100,
+                        currency: 'usd',
+                        quantity: p.quantity
+                    };
+                }),
+                success_url: `${req.protocol}://${req.get('host')}/checkout/success`,
+                cancel_url: `${req.protocol}://${req.get('host')}/checkout/cancel`
+            });
+        })
+        .then(session=>{
+            res.render('shop/checkout', {
+                pageTitle: 'Checkout',
+                path: '/checkout',
+                products:products,
+                totalAmount:total,
+                sessionId:session.id
+            });
+        })
+        .catch(err=> {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+
 }
 
 exports.postOrder = (req,res,next)=>{
